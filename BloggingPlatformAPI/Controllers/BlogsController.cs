@@ -20,14 +20,14 @@ namespace BloggingPlatformAPI.Controllers
         public IActionResult GetBlogs()
         {
             var blogs = _context.Blogs
-                .AsEnumerable()  // Forces the query to be executed in memory, allowing for operations like Split
+                .AsEnumerable()   
                 .Select(blog => new
                 {
                     blog.Id,
                     blog.Title,
                     blog.Content,
                     blog.Category,
-                    Tags = blog.Tags != null ? blog.Tags.Split(';') : new string[] { }, // Now processed in memory
+                    Tags = blog.Tags != null ? blog.Tags.Split(';') : new string[] { },
                     blog.CreatedAt,
                     blog.UpdatedAt
                 }).ToList();
@@ -39,7 +39,7 @@ namespace BloggingPlatformAPI.Controllers
         public IActionResult GetBlog(int id)
         {
             var blog = _context.Blogs
-                .AsEnumerable()  // Forces the query to be executed in memory
+                .AsEnumerable()  
                 .Where(b => b.Id == id)
                 .Select(b => new
                 {
@@ -47,7 +47,7 @@ namespace BloggingPlatformAPI.Controllers
                     b.Title,
                     b.Content,
                     b.Category,
-                    Tags = b.Tags != null ? b.Tags.Split(';') : new string[] { }, // Now processed in memory
+                    Tags = b.Tags != null ? b.Tags.Split(';') : new string[] { }, 
                     b.CreatedAt,
                     b.UpdatedAt
                 }).FirstOrDefault();
@@ -63,7 +63,6 @@ namespace BloggingPlatformAPI.Controllers
         [HttpPost]
         public IActionResult PostBlog([FromBody] Blog blog)
         {
-            // Split tags into an array from a comma-separated string
             blog.Tags = string.Join(";", blog.Tags?.Split(',') ?? Array.Empty<string>());
 
             _context.Blogs.Add(blog);
